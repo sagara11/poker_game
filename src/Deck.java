@@ -7,7 +7,11 @@ public class Deck {
     private List<Card> cardOnDeck;
     private List<Player> players;
     private int cardOpenedCount = 0;
-    private DeckStatus status = DeckStatus.FLOP;
+    private DeckStatus status;
+
+    public List<Card> getCardOnDeck() {
+        return cardOnDeck;
+    }
 
     public List<Player> getPlayers() {
         return players;
@@ -28,6 +32,8 @@ public class Deck {
     public Deck(List<Player> players){
         this();
         this.players = players;
+        this.cardOnDeck = new ArrayList<>(5);
+        this.status = DeckStatus.FLOP;
     }
 
     public Deck(){
@@ -73,8 +79,9 @@ public class Deck {
             case TURN, RIVER -> 1;
             default -> 3;
         };
-        status.changeState(status);
-
-        while ()
+        this.status = DeckStatus.changeState(status);
+        List<Card> cardToOpen = standardCardOnDeck.subList(cardOpenedCount, cardOpenedCount + cardsToOpen);
+        cardOpenedCount += cardsToOpen;
+        cardOnDeck.addAll(cardToOpen);
     }
 }

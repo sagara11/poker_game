@@ -3,7 +3,10 @@ public enum DeckStatus {
     TURN,
     RIVER;
 
-    public DeckStatus changeState(DeckStatus status){
+    public static DeckStatus changeState(DeckStatus status){
+        if (status == RIVER){
+            status = FLOP;
+        }
         int nextState = status.ordinal() + 1;
         return DeckStatus.values()[nextState];
     }

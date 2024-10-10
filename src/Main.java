@@ -28,13 +28,27 @@ public class Main {
         // Dealing Cards
         deck.dealingCards();
 
-        // Evaluate card from each user
-        CardRules cardRules = new CardRules(deck.getStandardCardOnDeck());
-        cardRules.evaluate(player1.getCardOnHand());
-
-        deck.printDeck();
+        // Open flop -> turn -> river
+        // Flop
+        deck.openCard();
         for (Player player : players){
             System.out.println(player.getCardOnHand());
         }
+        CardRules.evaluate(player1, deck.getCardOnDeck());
+        System.out.println("-".repeat(50));
+        for (Player player : players){
+            System.out.println(player.getCardOnHand());
+        }
+//        // Turn
+//        deck.openCard();
+//        System.out.println(deck.getCardOnDeck());
+//        // River
+//        deck.openCard();
+//        System.out.println(deck.getCardOnDeck());
+//
+//        deck.printDeck();
+//        for (Player player : players){
+//            System.out.println(player.getCardOnHand());
+//        }
     }
 }
