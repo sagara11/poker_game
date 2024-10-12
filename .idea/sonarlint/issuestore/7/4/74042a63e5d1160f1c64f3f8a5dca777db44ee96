@@ -1,0 +1,5 @@
+
+L	java:S106;"+Replace this use of System.out by a logger.(«»áÐúÿÿÿÿ8ßµø‚¨2
+L	java:S106="+Replace this use of System.out by a logger.(þÅÂ½ûÿÿÿÿ8àµø‚¨2
+K
+java:S1128".Remove this unused import 'java.util.Objects'.(¼¸õ›8àµø‚¨2
