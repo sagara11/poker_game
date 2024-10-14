@@ -30,8 +30,8 @@ public class CardRules {
         userCardCopy.sort(Comparator.comparing(Card::getRank));
         Integer[] listOfRank = getListOfRank(userCardCopy);
 
-//        Pattern pair = isPair(listOfRank);
-//        System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), pair.toString());
+        Pattern pair = isPair(listOfRank);
+        System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), pair.toString());
 
         Pattern straight = isStraightFromSevenCards(listOfRank);
         System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), straight.toString());
@@ -100,7 +100,7 @@ public class CardRules {
                                     cards.contains(3) &&
                                     cards.contains(4) &&
                                     cards.contains(5) &&
-                                    cards.contains(12);
+                                    cards.contains(14);
         return isStandardStraight || isAceLowStraight;
     }
 

@@ -49,9 +49,13 @@ public class Main {
 //        CardRules.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 
+        testStraight();
+    }
+
+    public static void testStraight(){
         List<Card> cards = List.of(
                 Card.getFaceCard(Suit.HEART, 'A'),
-                Card.getNumericCard(Suit.HEART, 2),
+                Card.getNumericCard(Suit.HEART, 9),
                 Card.getNumericCard(Suit.HEART, 4),
                 Card.getFaceCard(Suit.HEART, 'J'),
                 Card.getFaceCard(Suit.HEART, 'K')
