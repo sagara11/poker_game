@@ -28,27 +28,43 @@ public class Main {
         // Dealing Cards
         deck.dealingCards();
 
+        // Print each player's cards
+        for (Player player : players){
+            System.out.println(player.getCardOnHand());
+        }
+
         // Open flop -> turn -> river
         // Flop
-        deck.openCard();
-        for (Player player : players){
-            System.out.println(player.getCardOnHand());
-        }
-        CardRules.evaluate(player1, deck.getCardOnDeck());
-        System.out.println("-".repeat(50));
-        for (Player player : players){
-            System.out.println(player.getCardOnHand());
-        }
-//        // Turn
 //        deck.openCard();
-//        System.out.println(deck.getCardOnDeck());
-//        // River
-//        deck.openCard();
+//        CardRules.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 //
-//        deck.printDeck();
-//        for (Player player : players){
-//            System.out.println(player.getCardOnHand());
-//        }
+//        // Turn
+//        deck.openCard();
+//        CardRules.evaluate(player1, deck.getCardOnDeck());
+//        System.out.println(deck.getCardOnDeck());
+//
+//        // River
+//        deck.openCard();
+//        CardRules.evaluate(player1, deck.getCardOnDeck());
+//        System.out.println(deck.getCardOnDeck());
+        testStraight();
+    }
+
+    public static void testStraight(){
+        List<Card> cards = List.of(
+                Card.getFaceCard(Suit.HEART, 'A'),
+                Card.getNumericCard(Suit.HEART, 2),
+                Card.getNumericCard(Suit.HEART, 4),
+                Card.getFaceCard(Suit.HEART, 'J'),
+                Card.getFaceCard(Suit.HEART, 'K')
+        );
+
+        Player player = new Player(List.of(
+                Card.getNumericCard(Suit.DIAMOND, 3),
+                Card.getNumericCard(Suit.DIAMOND, 5)
+        ), "Tommy");
+
+        CardRules.evaluate(player, cards);
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 public class Card {
     private Suit suit;
     private String face;
-    private int rank;
+    private Integer rank;
 
     public Card(Suit suit, String face, int rank) {
         this.suit = suit;
@@ -21,7 +21,7 @@ public class Card {
         return face;
     }
 
-    public int getRank() {
+    public Integer getRank() {
         return rank;
     }
 
@@ -34,7 +34,7 @@ public class Card {
 
     public static Card getNumericCard(Suit suit, int cardNumber){
         if (cardNumber > 1 && cardNumber < 11){
-            return new Card(suit, String.valueOf(cardNumber), cardNumber - 2);
+            return new Card(suit, String.valueOf(cardNumber), cardNumber);
         }
         return null;
     }
@@ -42,7 +42,7 @@ public class Card {
     public static Card getFaceCard(Suit suit, char abbrev){
         int index = "JQKA".indexOf(abbrev);
         if (index > -1){
-            return new Card(suit, abbrev + "", index + 9);
+            return new Card(suit, abbrev + "", index + 11);
         }
 
         return null;
