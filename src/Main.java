@@ -49,7 +49,8 @@ public class Main {
 //        CardRules.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 
-        testStraight();
+//        testStraight();
+        testFlush();
     }
 
     public static void testStraight(){
@@ -68,4 +69,21 @@ public class Main {
 
         CardRules.evaluate(player, cards);
     }
+    public static void testFlush(){
+        List<Card> cards = List.of(
+                Card.getFaceCard(Suit.DIAMOND, 'A'),
+                Card.getNumericCard(Suit.DIAMOND, 2),
+                Card.getNumericCard(Suit.SPADE, 4),
+                Card.getFaceCard(Suit.CLUB, 'J'),
+                Card.getFaceCard(Suit.DIAMOND, 'K')
+        );
+
+        Player player = new Player(List.of(
+                Card.getNumericCard(Suit.DIAMOND, 3),
+                Card.getNumericCard(Suit.DIAMOND, 5)
+        ), "Tommy");
+
+        CardRules.evaluate(player, cards);
+    }
+
 }

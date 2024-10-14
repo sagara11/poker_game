@@ -35,6 +35,9 @@ public class CardRules {
 
         Pattern straight = isStraightFromSevenCards(listOfRank);
         System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), straight.toString());
+
+        Pattern flush = isFlushFromSevenCards(userCardCopy);
+        System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), flush.toString());
     }
 
     private static Pattern isPair(Integer[] cardRanks){
@@ -67,7 +70,6 @@ public class CardRules {
             default -> Pattern.HIGH_CARD;
         };
     }
-
     private static Integer[] getListOfRank(List<Card> cards) {
         return cards.stream()
                 .map(Card::getRank)
@@ -111,5 +113,44 @@ public class CardRules {
             }
         }
         return true;
+    }
+
+    private static void generateCombinations(
+            List<Card> cards,
+            List<Card> currentSolution,
+            int start,
+            List<List<Card>> result
+    ) {
+        if (currentSolution.size() == 5){
+            result.add(new ArrayList<>(currentSolution));
+            return;
+        }
+
+        for (int i = start; i < cards.size(); i++){
+            currentSolution.add(cards.get(i));
+            generateCombinations(cards, currentSolution, i + 1, result);
+            currentSolution.remove(currentSolution.size() - 1);
+        }
+    }
+
+    private static Pattern isFlushFromSevenCards(List<Card> cards){
+        List<List<Card>> combinations = new ArrayList<>(21);
+        generateCombinations(cards, new ArrayList<>(5), 0, combinations);
+
+        for (var combination : combinations){
+            if (isFlush(combination)){
+                return Pattern.FLUSH;
+            }
+        }
+        return Pattern.HIGH_CARD;
+    }
+
+    private static boolean isFlush(List<Card> cards){
+        if (cards.isEmpty()){
+            return false;
+        }
+        Suit suit = cards.get(0).getSuit();
+        boolean isNotFlush = cards.stream().anyMatch(c -> c.getSuit() != suit);
+        return !isNotFlush;
     }
 }
