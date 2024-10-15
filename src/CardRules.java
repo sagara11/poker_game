@@ -27,7 +27,6 @@ public class CardRules {
     public static void evaluate(Player player, List<Card> deckCard) {
         List<Card> userCardCopy = new ArrayList<>(player.getCardOnHand());
         userCardCopy.addAll(deckCard);
-        userCardCopy.sort(Comparator.comparing(Card::getRank));
         Integer[] listOfRank = getListOfRank(userCardCopy);
 
         Pattern pair = isPair(listOfRank);
@@ -36,7 +35,7 @@ public class CardRules {
         Pattern straight = isStraightFromSevenCards(listOfRank);
         System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), straight.toString());
 
-        Pattern flush = isFlushFromSevenCards(userCardCopy);
+        Pattern flush = isFlushUsingSortAndTwoPointer(userCardCopy);
         System.out.printf("Player: %s win the game with %s in hand \n", player.getName(), flush.toString());
     }
 
@@ -76,8 +75,16 @@ public class CardRules {
                 .toArray(Integer[]::new);
     }
 
+    private static Suit[] getListOfSuit(List<Card> cards) {
+        return cards.stream()
+                .map(Card::getSuit)
+                .toArray(Suit[]::new);
+    }
+
     private static Pattern isStraightFromSevenCards(Integer[] cards) {
         // Sliding window of size 5
+        Arrays.sort(cards);
+
         List<Integer> listOfCardsResizing = new ArrayList<>(Arrays.asList(cards));
 
         if(listOfCardsResizing.contains(14)){
@@ -115,42 +122,38 @@ public class CardRules {
         return true;
     }
 
-    private static void generateCombinations(
-            List<Card> cards,
-            List<Card> currentSolution,
-            int start,
-            List<List<Card>> result
-    ) {
-        if (currentSolution.size() == 5){
-            result.add(new ArrayList<>(currentSolution));
-            return;
-        }
+    private static Pattern isFlushUsingHashTable(List<Card> cards){
+        // Using hash_table: TC: O(n) & SP: O(n)
+        Map<Suit, Integer> hashMap = new HashMap<>();
 
-        for (int i = start; i < cards.size(); i++){
-            currentSolution.add(cards.get(i));
-            generateCombinations(cards, currentSolution, i + 1, result);
-            currentSolution.remove(currentSolution.size() - 1);
-        }
-    }
-
-    private static Pattern isFlushFromSevenCards(List<Card> cards){
-        List<List<Card>> combinations = new ArrayList<>(21);
-        generateCombinations(cards, new ArrayList<>(5), 0, combinations);
-
-        for (var combination : combinations){
-            if (isFlush(combination)){
+        for(Card card : cards){
+            Suit suit = card.getSuit();
+            hashMap.put(suit, hashMap.getOrDefault(suit, 0) + 1);
+            if (hashMap.get(suit) == 5){
                 return Pattern.FLUSH;
             }
         }
         return Pattern.HIGH_CARD;
     }
 
-    private static boolean isFlush(List<Card> cards){
-        if (cards.isEmpty()){
-            return false;
+    private static Pattern isFlushUsingSortAndTwoPointer(List<Card> cards){
+        // Using sort + two pointer: TC: O(nlog(n)) + O(n) & SP: O(1)
+        Suit[] listOfSuit = getListOfSuit(cards);
+        Arrays.sort(listOfSuit, Comparator.comparing(Suit::getRank));
+
+        int p1 = 0;
+        int p2 = 0;
+
+        while (p2 < listOfSuit.length) {
+            if (p2 - p1 == 4 && listOfSuit[p1] == listOfSuit[p2]){
+                return Pattern.FLUSH;
+            }
+            if (listOfSuit[p1] != listOfSuit[p2]){
+                p1 = p2;
+            }
+            p2++;
         }
-        Suit suit = cards.get(0).getSuit();
-        boolean isNotFlush = cards.stream().anyMatch(c -> c.getSuit() != suit);
-        return !isNotFlush;
+
+        return Pattern.HIGH_CARD;
     }
 }

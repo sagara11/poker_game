@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -55,32 +56,32 @@ public class Main {
 
     public static void testStraight(){
         List<Card> cards = List.of(
-                Card.getFaceCard(Suit.HEART, 'A'),
-                Card.getNumericCard(Suit.HEART, 9),
-                Card.getNumericCard(Suit.HEART, 4),
-                Card.getFaceCard(Suit.HEART, 'J'),
-                Card.getFaceCard(Suit.HEART, 'K')
+                Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'A')),
+                Objects.requireNonNull(Card.getNumericCard(Suit.HEART, 9)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.HEART, 4)),
+                Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'J')),
+                Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'K'))
         );
 
         Player player = new Player(List.of(
-                Card.getNumericCard(Suit.DIAMOND, 3),
-                Card.getNumericCard(Suit.DIAMOND, 5)
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 3)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 5))
         ), "Tommy");
 
         CardRules.evaluate(player, cards);
     }
     public static void testFlush(){
         List<Card> cards = List.of(
-                Card.getFaceCard(Suit.DIAMOND, 'A'),
-                Card.getNumericCard(Suit.DIAMOND, 2),
-                Card.getNumericCard(Suit.SPADE, 4),
-                Card.getFaceCard(Suit.CLUB, 'J'),
-                Card.getFaceCard(Suit.DIAMOND, 'K')
+                Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'A')),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 2)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 4)),
+                Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'J')),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'K'))
         );
 
         Player player = new Player(List.of(
-                Card.getNumericCard(Suit.DIAMOND, 3),
-                Card.getNumericCard(Suit.DIAMOND, 5)
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 3)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 5))
         ), "Tommy");
 
         CardRules.evaluate(player, cards);
