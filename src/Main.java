@@ -37,28 +37,32 @@ public class Main {
         // Open flop -> turn -> river
         // Flop
 //        deck.openCard();
-//        CardRules.evaluate(player1, deck.getCardOnDeck());
+//        Aggregator.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 //
 //        // Turn
 //        deck.openCard();
-//        CardRules.evaluate(player1, deck.getCardOnDeck());
+//        Aggregator.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 //
 //        // River
 //        deck.openCard();
-//        CardRules.evaluate(player1, deck.getCardOnDeck());
+//        Aggregator.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 
 //        testStraight();
         testFlush();
+        System.out.println("-".repeat(50));
+        testStraight();
+        System.out.println("-".repeat(50));
+        testFullHouse();
     }
 
     public static void testStraight(){
         List<Card> cards = List.of(
-                Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'A')),
-                Objects.requireNonNull(Card.getNumericCard(Suit.HEART, 9)),
-                Objects.requireNonNull(Card.getNumericCard(Suit.HEART, 4)),
+                Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'A')),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 2)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 4)),
                 Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'J')),
                 Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'K'))
         );
@@ -68,23 +72,38 @@ public class Main {
                 Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 5))
         ), "Tommy");
 
-        CardRules.evaluate(player, cards);
+        Aggregator.evaluate(player, cards);
     }
     public static void testFlush(){
         List<Card> cards = List.of(
-                Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'A')),
-                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 2)),
-                Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 4)),
-                Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'J')),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'A')),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'Q')),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 10)),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'J')),
                 Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'K'))
         );
 
         Player player = new Player(List.of(
-                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 3)),
-                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 5))
+                Objects.requireNonNull(Card.getNumericCard(Suit.CLUB, 3)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 5))
         ), "Tommy");
 
-        CardRules.evaluate(player, cards);
+        Aggregator.evaluate(player, cards);
     }
+    public static void testFullHouse(){
+        List<Card> cards = List.of(
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'A')),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'A')),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 10)),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'J')),
+                Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'K'))
+        );
 
+        Player player = new Player(List.of(
+                Objects.requireNonNull(Card.getNumericCard(Suit.CLUB, 10)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 10))
+        ), "Tommy");
+
+        Aggregator.evaluate(player, cards);
+    }
 }
