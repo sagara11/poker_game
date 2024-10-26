@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+package poker;
+
+import poker.enums.Suit;
 
 public class Card {
     private Suit suit;

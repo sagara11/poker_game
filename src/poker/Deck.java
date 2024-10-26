@@ -1,7 +1,12 @@
+package poker;
+
+
+import poker.enums.DeckStatus;
+import poker.enums.Suit;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class Deck {
     private List<Card> standardCardOnDeck;

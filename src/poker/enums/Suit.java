@@ -1,3 +1,5 @@
+package poker.enums;
+
 public enum Suit {
     CLUB(0),
     DIAMOND(1),

@@ -1,3 +1,10 @@
+
+import poker.Aggregator;
+import poker.Card;
+import poker.Deck;
+import poker.Player;
+import poker.enums.Suit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,9 +58,9 @@ public class Main {
 //        System.out.println(deck.getCardOnDeck());
 
 //        testStraight();
-        testFlush();
-        System.out.println("-".repeat(50));
         testStraight();
+//        System.out.println("-".repeat(50));
+//        testFlush();
         System.out.println("-".repeat(50));
         testFullHouse();
     }
@@ -61,7 +68,7 @@ public class Main {
     public static void testStraight(){
         List<Card> cards = List.of(
                 Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'A')),
-                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 2)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 3)),
                 Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 4)),
                 Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'J')),
                 Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'K'))
@@ -72,8 +79,10 @@ public class Main {
                 Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 5))
         ), "Tommy");
 
-        Aggregator.evaluate(player, cards);
+        Aggregator aggregator = new Aggregator();
+        aggregator.evaluate(player, cards);
     }
+
     public static void testFlush(){
         List<Card> cards = List.of(
                 Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'A')),
@@ -88,8 +97,10 @@ public class Main {
                 Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 5))
         ), "Tommy");
 
-        Aggregator.evaluate(player, cards);
+        Aggregator aggregator = new Aggregator();
+        aggregator.evaluate(player, cards);
     }
+
     public static void testFullHouse(){
         List<Card> cards = List.of(
                 Objects.requireNonNull(Card.getFaceCard(Suit.DIAMOND, 'A')),
@@ -104,6 +115,7 @@ public class Main {
                 Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 10))
         ), "Tommy");
 
-        Aggregator.evaluate(player, cards);
+        Aggregator aggregator = new Aggregator();
+        aggregator.evaluate(player, cards);
     }
 }

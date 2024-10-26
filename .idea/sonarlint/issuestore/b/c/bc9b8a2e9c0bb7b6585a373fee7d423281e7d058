@@ -1,0 +1,8 @@
+
+O
+java:S1144&"2Remove this unused private "getListOfSuit" method.(ñÕ·Ç8­›ñ¶¬2
+‚
+java:S1118":Add a private constructor to hide the implicit public one.(ÔŽ‡´ÿÿÿÿÿ8Œø¶¶¬2J$6e8f18b3-cb8b-4c76-aab3-0693b00f0fdf
+r	java:S106n"+Replace this use of System.out by a logger.(í­ÚÐúÿÿÿÿ8ò³Ö¶¬2J$ab992d70-c18c-4140-9d79-8da558375cf9
+š
+java:S3776p"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ð¾¡Ôøÿÿÿÿ8™ø¶¶¬2J$f1c9653a-2c53-431e-a2e4-30aa94470ae5

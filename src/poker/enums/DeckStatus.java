@@ -1,3 +1,5 @@
+package poker.enums;
+
 public enum DeckStatus {
     FLOP,
     TURN,
