@@ -7,6 +7,7 @@ import poker.services.Base;
 import poker.services.Flush;
 import poker.services.Straight;
 
+import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.function.Function;
 
@@ -34,7 +35,7 @@ public class Aggregator {
         }
     }
 
-    private static boolean isContainingAceUpperBound(List<Card> cards){
+    public static boolean isContainingAceUpperBound(List<Card> cards){
         List<Integer> ranksOfCard = Base.getListOfElements(cards, Card::getRank);
         return  ranksOfCard.contains(10) &&
                 ranksOfCard.contains(11) &&
@@ -43,40 +44,52 @@ public class Aggregator {
                 ranksOfCard.contains(14);
     }
 
-    public void evaluate(Player player, List<Card> deckCard) {
+    public void evaluate(Player player, List<Card> deckCard, String method) {
+        Pattern stateOfPlayer = switch (method){
+            case "evaluateSubsequently" -> evaluateSubsequently(player, deckCard);
+            default -> Pattern.HIGH_CARD;
+        };
+        System.out.printf("The player %s is the winner with %s in hand \n", player.getName(), stateOfPlayer);
+    }
+
+    /*
+        I set up each pattern to win the game with a specific condition in Pattern enum.
+        Afterward, I loop through all the patterns to evaluate the highest pattern in the hand of player.
+        In the end, I will get the highest answer.
+
+        Time complexity: O(n) with n is the numbers of all the possible patterns in poker
+        Space complexity: O(n)
+     */
+    private Pattern evaluateSubsequently(Player player, List<Card> deckCard){
         List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
         totalCards.addAll(deckCard);
 
-        List<Function<List<Card>, Pattern>> conditions = generatePatternConditions(
-                totalCards,
-                "slidingWindow",
-                "hashTable"
-        );
+        preProcessingCards(totalCards);
         Pattern stateOfPlayer = Pattern.HIGH_CARD;
-        for (var condition: conditions){
-            Pattern result = condition.apply(totalCards);
+        for (Pattern pattern: Pattern.values()){
+            String method = pattern == Pattern.STRAIGHT ? "slidingWindow" : "hashTable";
+            Pattern result = pattern.examine(totalCards, pairCount, numberCount, method);
             if (stateOfPlayer.getRank() < result.getRank()){
                 stateOfPlayer = result;
             }
         }
 
-        System.out.printf("The player %s is the winner with %s in hand \n", player.getName(), stateOfPlayer);
+        return stateOfPlayer;
     }
 
-    private List<Function<List<Card>, Pattern>> generatePatternConditions(List<Card> cards, String straightMethod, String flushMethod) {
-        preProcessingCards(cards);
-        Function<List<Card>, Pattern> highCard = p -> Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> onePair = p -> pairCount == 1 && numberCount == 2 ? Pattern.ONE_PAIR : Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> twoPair = p -> pairCount == 2 && numberCount == 4 ? Pattern.TWO_PAIR : Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> threeOfAKind = p -> pairCount == 1 && numberCount == 3 ? Pattern.THREE_OF_THE_KIND : Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> straight = p -> Straight.isStraight(p, straightMethod);
-        Function<List<Card>, Pattern> flush = p -> Flush.isFlush(cards, flushMethod);
-        Function<List<Card>, Pattern> fullHouse = p -> pairCount == 2 && numberCount == 5 ? Pattern.FULL_HOUSE : Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> fourOfAKind = p -> pairCount == 1 && numberCount == 4 ? Pattern.FOUR_OF_THE_KIND : Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> straightFlush =
-                p -> straight.apply(p) == Pattern.STRAIGHT && flush.apply(p) == Pattern.FLUSH ? Pattern.STRAIGHT_FLUSH : Pattern.HIGH_CARD;
-        Function<List<Card>, Pattern> royalFlush =
-                p -> straightFlush.apply(p) == Pattern.STRAIGHT_FLUSH && isContainingAceUpperBound(p) ? Pattern.ROYAL_FLUSH : Pattern.HIGH_CARD;
-        return List.of(highCard, onePair, twoPair, threeOfAKind, straight, flush, fullHouse, fourOfAKind, straightFlush, royalFlush);
+    private Pattern evaluateBasedOnGraph(Player player, List<Card> deckCard){
+        List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
+        totalCards.addAll(deckCard);
+
+        Pattern stateOfPlayer = Pattern.HIGH_CARD;
+        for (Pattern pattern: Pattern.values()){
+            String method = pattern == Pattern.STRAIGHT ? "slidingWindow" : "hashTable";
+            Pattern result = pattern.examine(totalCards, pairCount, numberCount, method);
+            if (stateOfPlayer.getRank() < result.getRank()){
+                stateOfPlayer = result;
+            }
+        }
+
+        return stateOfPlayer;
     }
 }

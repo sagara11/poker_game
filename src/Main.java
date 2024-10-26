@@ -1,8 +1,5 @@
 
-import poker.Aggregator;
-import poker.Card;
-import poker.Deck;
-import poker.Player;
+import poker.*;
 import poker.enums.Suit;
 
 import java.util.ArrayList;
@@ -57,12 +54,15 @@ public class Main {
 //        Aggregator.evaluate(player1, deck.getCardOnDeck());
 //        System.out.println(deck.getCardOnDeck());
 
-//        testStraight();
         testStraight();
-//        System.out.println("-".repeat(50));
-//        testFlush();
+        System.out.println("-".repeat(50));
+        testFlush();
         System.out.println("-".repeat(50));
         testFullHouse();
+
+//        Graph graph = new Graph();
+        // Display the graph
+//        graph.printGraph();
     }
 
     public static void testStraight(){
@@ -80,7 +80,7 @@ public class Main {
         ), "Tommy");
 
         Aggregator aggregator = new Aggregator();
-        aggregator.evaluate(player, cards);
+        aggregator.evaluate(player, cards, "evaluateSubsequently");
     }
 
     public static void testFlush(){
@@ -98,7 +98,7 @@ public class Main {
         ), "Tommy");
 
         Aggregator aggregator = new Aggregator();
-        aggregator.evaluate(player, cards);
+        aggregator.evaluate(player, cards, "evaluateSubsequently");
     }
 
     public static void testFullHouse(){
@@ -116,6 +116,6 @@ public class Main {
         ), "Tommy");
 
         Aggregator aggregator = new Aggregator();
-        aggregator.evaluate(player, cards);
+        aggregator.evaluate(player, cards, "evaluateSubsequently");
     }
 }
