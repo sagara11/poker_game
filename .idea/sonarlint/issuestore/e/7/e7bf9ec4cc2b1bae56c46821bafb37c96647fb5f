@@ -1,7 +1,0 @@
-
-s
-java:S1144("+Remove this unused private "isPair" method.(à°µ¦üÿÿÿÿ8¼ââ‚¨2J$0c532394-feb2-4946-8b85-8938593f6bf4
-~	java:S125!"<This block of commented-out lines of code should be removed.(¸ÖÓÔ8½ââ‚¨2J$a0f44ab0-62e8-405b-b0ec-f871cd171877
-™
-java:S3457%"Q%n should be used in place of \n to produce the platform-specific line separator.(¸…¶éÿÿÿÿÿ8–ÂË‚¨2J$4a07c167-1845-4d38-acab-0ebff66f1d4c
-r	java:S106%"+Replace this use of System.out by a logger.(¸…¶éÿÿÿÿÿ8•ìÞ‚¨2J$6d0c71ed-4370-4019-a859-bf9dd6dae8d2
