@@ -51,7 +51,7 @@ public class Straight extends Base {
         for (int i = start; i < cards.size(); i++){
             currentSolution.add(cards.get(i));
             generateCombinations(cards, currentSolution, i + 1, result);
-            currentSolution.remove(currentSolution.size() - 1);
+            currentSolution.removeLast();
         }
     }
 
@@ -66,7 +66,7 @@ public class Straight extends Base {
         Time Complexity: O(n - 5) (n in this case is 7) = O(2) - Constant Time
         Space Complexity: O(1)
      */
-    private static Pattern isStraightUsingSlidingWindow(List<Card> cards) {
+    private static boolean isStraightUsingSlidingWindow(List<Card> cards) {
         // Sliding window of size 5
         List<Integer> listOfRanks = getListOfElements(cards, Card::getRank);
         Arrays.sort(listOfRanks.toArray());
@@ -74,39 +74,39 @@ public class Straight extends Base {
         List<Integer> listOfCardsResizing = new ArrayList<>(listOfRanks);
 
         if(listOfCardsResizing.contains(14)){
-            listOfCardsResizing.add(0, 1);
+            listOfCardsResizing.addFirst(1);
         }
         for (int i = 0; i <= listOfCardsResizing.size() - 5; i++) {
             List<Integer> window = listOfCardsResizing.subList(i, i + 5); // Get the current 5-card window
             if (isStraight(window)) {
-                return Pattern.STRAIGHT; // Found a straight
+                return true; // Found a straight
             }
         }
 
-        return Pattern.HIGH_CARD; // No straight found
+        return false; // No straight found
     }
 
     /*
         We just simply test all possible combinations and return the straight one
         right after matching the isStraight condition in the for loop.
      */
-    private static Pattern isStraightUsingBackTracking(List<Card> cards) {
+    private static boolean isStraightUsingBackTracking(List<Card> cards) {
         List<List<Integer>> combinations = new ArrayList<>(21);
         generateCombinations(getListOfElements(cards, Card::getRank), new ArrayList<>(5), 0, combinations);
 
         for (var combination : combinations){
             if (isStraight(combination)){
-                return Pattern.STRAIGHT;
+                return true;
             }
         }
-        return Pattern.HIGH_CARD;
+        return false;
     }
 
-    public static Pattern isStraight(List<Card> cards, String method){
+    public static boolean isStraight(List<Card> cards, String method){
         return switch (method){
             case "slidingWindow" -> isStraightUsingSlidingWindow(cards);
             case "backTracking" -> isStraightUsingBackTracking(cards);
-            default -> Pattern.HIGH_CARD;
+            default -> false;
         };
     }
 }

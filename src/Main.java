@@ -59,16 +59,12 @@ public class Main {
         testFlush();
         System.out.println("-".repeat(50));
         testFullHouse();
-
-//        Graph graph = new Graph();
-        // Display the graph
-//        graph.printGraph();
     }
 
     public static void testStraight(){
         List<Card> cards = List.of(
                 Objects.requireNonNull(Card.getFaceCard(Suit.CLUB, 'A')),
-                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 3)),
+                Objects.requireNonNull(Card.getNumericCard(Suit.DIAMOND, 2)),
                 Objects.requireNonNull(Card.getNumericCard(Suit.SPADE, 4)),
                 Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'J')),
                 Objects.requireNonNull(Card.getFaceCard(Suit.HEART, 'K'))
@@ -80,7 +76,7 @@ public class Main {
         ), "Tommy");
 
         Aggregator aggregator = new Aggregator();
-        aggregator.evaluate(player, cards, "evaluateSubsequently");
+        aggregator.evaluate(player, cards, "evaluateDFS");
     }
 
     public static void testFlush(){
@@ -98,7 +94,7 @@ public class Main {
         ), "Tommy");
 
         Aggregator aggregator = new Aggregator();
-        aggregator.evaluate(player, cards, "evaluateSubsequently");
+        aggregator.evaluate(player, cards, "evaluateDFS");
     }
 
     public static void testFullHouse(){
@@ -116,6 +112,6 @@ public class Main {
         ), "Tommy");
 
         Aggregator aggregator = new Aggregator();
-        aggregator.evaluate(player, cards, "evaluateSubsequently");
+        aggregator.evaluate(player, cards, "evaluateDFS");
     }
 }

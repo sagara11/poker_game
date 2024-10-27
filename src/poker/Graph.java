@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Graph {
-    private Map<Pattern, List<Pattern>> adjList;
+    private final Map<Pattern, List<Pattern>> adjList;
 
     // Initialize the graph with an empty adjacency list
     public Graph() {
@@ -23,19 +23,16 @@ public class Graph {
 
         // High Card node
         addEdge(Pattern.HIGH_CARD, Pattern.ONE_PAIR);
-        addEdge(Pattern.HIGH_CARD, Pattern.STRAIGHT);
         addEdge(Pattern.HIGH_CARD, Pattern.FLUSH);
+        addEdge(Pattern.HIGH_CARD, Pattern.STRAIGHT);
 
         // One Pair node
         addEdge(Pattern.ONE_PAIR, Pattern.TWO_PAIR);
-        addEdge(Pattern.ONE_PAIR, Pattern.THREE_OF_THE_KIND);
+        addEdge(Pattern.ONE_PAIR, Pattern.THREE_OF_A_KIND);
 
         // Two Pair node
         addEdge(Pattern.TWO_PAIR, Pattern.FULL_HOUSE);
-        addEdge(Pattern.TWO_PAIR, Pattern.FOUR_OF_THE_KIND);
-
-        // Straight node
-        addEdge(Pattern.STRAIGHT, Pattern.FLUSH);
+        addEdge(Pattern.TWO_PAIR, Pattern.FOUR_OF_A_KIND);
 
         // Flush node
         addEdge(Pattern.FLUSH, Pattern.STRAIGHT_FLUSH);
@@ -50,11 +47,10 @@ public class Graph {
     // Add an edge (undirected)
     public void addEdge(Pattern node1, Pattern node2) {
         adjList.get(node1).add(node2);
-        adjList.get(node2).add(node1);
     }
 
     // Get the neighbors of a node
-    public List<Pattern> getNeighbors(int node) {
+    public List<Pattern> getNeighbors(Pattern node) {
         return adjList.getOrDefault(node, new ArrayList<>());
     }
 

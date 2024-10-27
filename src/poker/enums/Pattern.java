@@ -5,70 +5,81 @@ import poker.services.Flush;
 import poker.services.Straight;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static poker.Aggregator.checkingPairPattern;
 import static poker.Aggregator.isContainingAceUpperBound;
 
 public enum Pattern {
     HIGH_CARD(0) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return true;
         }
     },
     ONE_PAIR(1) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return pairCount == 1 && numberCount == 2 ? Pattern.ONE_PAIR : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return checkingPairPattern(cards).getRank() >= this.getRank();
         }
     },
     TWO_PAIR(2) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return pairCount == 2 && numberCount == 4 ? Pattern.TWO_PAIR : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return checkingPairPattern(cards).getRank() >= this.getRank();
         }
     },
-    THREE_OF_THE_KIND(3) {
+    THREE_OF_A_KIND(3) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return pairCount == 1 && numberCount == 3 ? Pattern.THREE_OF_THE_KIND : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return checkingPairPattern(cards).getRank() >= this.getRank();
         }
     },
     STRAIGHT(4) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
             return Straight.isStraight(cards, method);
         }
     },
     FLUSH(5) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
             return Flush.isFlush(cards, method);
         }
     },
     FULL_HOUSE(6) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return pairCount == 2 && numberCount == 5 ? Pattern.FULL_HOUSE : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return checkingPairPattern(cards).getRank() >= this.getRank();
         }
     },
-    FOUR_OF_THE_KIND(7) {
+    FOUR_OF_A_KIND(7) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return pairCount == 1 && numberCount == 4 ? Pattern.FOUR_OF_THE_KIND : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return checkingPairPattern(cards).getRank() >= this.getRank();
         }
     },
     STRAIGHT_FLUSH(8) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return Pattern.STRAIGHT.examine(cards, pairCount, numberCount, method) == Pattern.STRAIGHT
-                    && Pattern.FLUSH.examine(cards, pairCount, numberCount, method) == Pattern.FLUSH ? Pattern.STRAIGHT_FLUSH : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return Pattern.STRAIGHT.examine(cards, method)
+                    && Pattern.FLUSH.examine(cards, method);
         }
     },
     ROYAL_FLUSH(9) {
         @Override
-        public Pattern examine(List<Card> cards, int pairCount, int numberCount, String method) {
-            return Pattern.STRAIGHT_FLUSH.examine(cards, pairCount, numberCount, method) == Pattern.STRAIGHT_FLUSH
-                    && isContainingAceUpperBound(cards) ? Pattern.ROYAL_FLUSH : Pattern.HIGH_CARD;
+        public boolean examine(List<Card> cards, String method) {
+            System.out.println("-".repeat(30) + this);
+            return Pattern.STRAIGHT_FLUSH.examine(cards, method) && isContainingAceUpperBound(cards);
         }
     };
 
@@ -82,5 +93,5 @@ public enum Pattern {
         return rank;
     }
 
-    public abstract Pattern examine(List<Card> cards, int pairCount, int numberCount, String method);
+    public abstract boolean examine(List<Card> cards, String method);
 }

@@ -2,37 +2,42 @@ package poker;
 
 
 import poker.enums.Pattern;
-import poker.enums.Suit;
 import poker.services.Base;
-import poker.services.Flush;
-import poker.services.Straight;
 
 import java.lang.reflect.Parameter;
 import java.util.*;
-import java.util.function.Function;
 
 public class Aggregator {
-    private int pairCount;
-    private int numberCount;
+    private Pattern stateOfTheWinner = Pattern.HIGH_CARD;
 
     /*
-        Unify cards by their ranks and count their frequency in the decks cards.
-        Afterward, I save it to a Hashmap with the key, value are rank, frequency respectively.
+        I count the frequency of all cards existing in the cards of deck.
+        Afterward, I evaluate them to determine if they are matched to the patterns.
+        Otherwise, I return the default pattern - High card.
      */
-
-    private void preProcessingCards(List<Card> cards){
+    public static Pattern checkingPairPattern(List<Card> cards){
         List<Integer> rankOfCards = Base.getListOfElements(cards, Card::getRank);
         Map<Integer, Integer> map = new HashMap<>();
         for (Integer rank : rankOfCards){
             map.put(rank, map.getOrDefault(rank, 0) + 1);
         }
 
-        for(var element : map.entrySet()){
-            if (element.getValue() > 1){
-                pairCount++;
-                numberCount += element.getValue();
+        int four = 0, three = 0, pair = 0;
+        for(var count : map.values()){
+            switch (count) {
+                case 4: four++;
+                case 3: three++;
+                case 2: pair++;
             }
         }
+
+        if (four > 0) return Pattern.FOUR_OF_A_KIND;
+        if (three > 0 && pair > 0) return Pattern.FULL_HOUSE;
+        if (three > 0) return Pattern.THREE_OF_A_KIND;
+        if (pair > 1) return Pattern.TWO_PAIR;
+        if (pair > 0) return Pattern.ONE_PAIR;
+
+        return Pattern.HIGH_CARD;
     }
 
     public static boolean isContainingAceUpperBound(List<Card> cards){
@@ -47,6 +52,7 @@ public class Aggregator {
     public void evaluate(Player player, List<Card> deckCard, String method) {
         Pattern stateOfPlayer = switch (method){
             case "evaluateSubsequently" -> evaluateSubsequently(player, deckCard);
+            case "evaluateDFS" -> evaluateDFS(player, deckCard);
             default -> Pattern.HIGH_CARD;
         };
         System.out.printf("The player %s is the winner with %s in hand \n", player.getName(), stateOfPlayer);
@@ -64,32 +70,54 @@ public class Aggregator {
         List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
         totalCards.addAll(deckCard);
 
-        preProcessingCards(totalCards);
         Pattern stateOfPlayer = Pattern.HIGH_CARD;
         for (Pattern pattern: Pattern.values()){
             String method = pattern == Pattern.STRAIGHT ? "slidingWindow" : "hashTable";
-            Pattern result = pattern.examine(totalCards, pairCount, numberCount, method);
-            if (stateOfPlayer.getRank() < result.getRank()){
-                stateOfPlayer = result;
+            if (
+                    stateOfPlayer.getRank() < pattern.getRank() &&
+                            pattern.examine(totalCards, method)
+            ){
+                stateOfPlayer = pattern;
             }
         }
 
         return stateOfPlayer;
     }
 
-    private Pattern evaluateBasedOnGraph(Player player, List<Card> deckCard){
+    // Public DFS method
+    public Pattern evaluateDFS(Player player, List<Card> deckCard) {
         List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
         totalCards.addAll(deckCard);
 
-        Pattern stateOfPlayer = Pattern.HIGH_CARD;
-        for (Pattern pattern: Pattern.values()){
-            String method = pattern == Pattern.STRAIGHT ? "slidingWindow" : "hashTable";
-            Pattern result = pattern.examine(totalCards, pairCount, numberCount, method);
-            if (stateOfPlayer.getRank() < result.getRank()){
-                stateOfPlayer = result;
-            }
+        Set<Pattern> visited = new HashSet<>(); // Set to track visited nodes
+        Graph graph = new Graph();
+        dfs(player, totalCards, Pattern.HIGH_CARD, visited, "", graph);
+
+        return stateOfTheWinner;
+    }
+
+    private void dfs(
+            Player player,
+            List<Card> totalCards,
+            Pattern node,
+            Set<Pattern> visited,
+            String method,
+            Graph graph
+    ){
+        if (visited.contains(node)) return;
+        visited.add(node);
+        if (stateOfTheWinner.getRank() > node.getRank()) return;
+        if (!node.examine(totalCards, node == Pattern.STRAIGHT ? "slidingWindow" : "hashTable"))
+            return;
+        if (graph.getNeighbors(node).isEmpty()) {
+            stateOfTheWinner = node.getRank() > stateOfTheWinner.getRank() ? node : stateOfTheWinner;
+            return;
         }
 
-        return stateOfPlayer;
+        // Visit all adjacent nodes that haven't been visited
+        for (var neighbor : graph.getNeighbors(node)) {
+            stateOfTheWinner = node.getRank() > stateOfTheWinner.getRank() ? node : stateOfTheWinner;
+            dfs(player, totalCards, neighbor, visited, method, graph); // Recursive call
+        }
     }
 }

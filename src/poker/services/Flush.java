@@ -6,11 +6,11 @@ import poker.enums.Suit;
 
 import java.util.*;
 public class Flush extends Base {
-    public static Pattern isFlush(List<Card> cards, String method){
+    public static boolean isFlush(List<Card> cards, String method){
         return switch (method){
             case "hashTable" -> isFlushUsingHashTable(cards);
             case "sortAndTwoPointer" -> isFlushUsingSortAndTwoPointer(cards);
-            default -> Pattern.HIGH_CARD;
+            default -> false;
         };
     }
 
@@ -22,7 +22,7 @@ public class Flush extends Base {
         Time Complexity: O(n) = O(7) - We have to loop through 7 cards in the deck.
         Space Complexity: O(n) = O(4) - We have save 4 kinds of suit: SPACE, DIAMOND, CLUB, HEART
      */
-    public static Pattern isFlushUsingHashTable(List<Card> cards){
+    public static boolean isFlushUsingHashTable(List<Card> cards){
         // Using hash_table: TC: O(n) & SP: O(n)
         Map<Suit, Integer> hashMap = new HashMap<>();
 
@@ -30,10 +30,10 @@ public class Flush extends Base {
             Suit suit = card.getSuit();
             hashMap.put(suit, hashMap.getOrDefault(suit, 0) + 1);
             if (hashMap.get(suit) == 5){
-                return Pattern.FLUSH;
+                return true;
             }
         }
-        return Pattern.HIGH_CARD;
+        return false;
     }
 
     /*
@@ -46,7 +46,7 @@ public class Flush extends Base {
         Time Complexity: O(nlog(n) + n) - Sort + loop through the cards in the deck
         Space Complexity: O(1)
      */
-    public static Pattern isFlushUsingSortAndTwoPointer(List<Card> cards){
+    public static boolean isFlushUsingSortAndTwoPointer(List<Card> cards){
         // Using sort + two pointer: TC: O(nlog(n)) + O(n) & SP: O(1)
         List<Suit> listOfSuit = getListOfElements(cards, Card::getSuit);
         Suit[] arrayOfSuit = listOfSuit.toArray(new Suit[]{});
@@ -57,7 +57,7 @@ public class Flush extends Base {
 
         while (p2 < arrayOfSuit.length) {
             if (p2 - p1 == 4 && arrayOfSuit[p1] == arrayOfSuit[p2]){
-                return Pattern.FLUSH;
+                return true;
             }
             if (arrayOfSuit[p1] != arrayOfSuit[p2]){
                 p1 = p2;
@@ -65,6 +65,6 @@ public class Flush extends Base {
             p2++;
         }
 
-        return Pattern.HIGH_CARD;
+        return false;
     }
 }
