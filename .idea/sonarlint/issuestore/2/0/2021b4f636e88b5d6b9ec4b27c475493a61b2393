@@ -1,0 +1,10 @@
+
+i
+java:S1192."LDefine a constant instead of duplicating this literal "evaluateDFS" 6 times.(§…½ú8Ûíøâ®2
+c
+java:S1192"FDefine a constant instead of duplicating this literal "Tommy" 4 times.(éÕ°­8Ûíøâ®2
+L	java:S106&"+Replace this use of System.out by a logger.(ã¥´Ğøÿÿÿÿ8êíøâ®2
+F	java:S106/"+Replace this use of System.out by a logger.(„¦ûX8ìíøâ®2
+F	java:S1064"+Replace this use of System.out by a logger.(„¦ûX8ííøâ®2
+F	java:S1069"+Replace this use of System.out by a logger.(„¦ûX8îíøâ®2
+X	java:S125;"<This block of commented-out lines of code should be removed.(§òÒó8ïíøâ®2

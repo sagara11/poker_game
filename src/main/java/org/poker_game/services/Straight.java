@@ -51,7 +51,7 @@ public class Straight extends Base {
         for (int i = start; i < cards.size(); i++){
             currentSolution.add(cards.get(i));
             generateCombinations(cards, currentSolution, i + 1, result);
-            currentSolution.removeLast();
+            currentSolution.remove(currentSolution.size());
         }
     }
 
@@ -74,7 +74,7 @@ public class Straight extends Base {
         List<Integer> listOfCardsResizing = new ArrayList<>(listOfRanks);
 
         if(listOfCardsResizing.contains(14)){
-            listOfCardsResizing.addFirst(1);
+            listOfCardsResizing.add(0, 1);
         }
         for (int i = 0; i <= listOfCardsResizing.size() - 5; i++) {
             List<Integer> window = listOfCardsResizing.subList(i, i + 5); // Get the current 5-card window
