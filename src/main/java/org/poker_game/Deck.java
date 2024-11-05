@@ -34,6 +34,10 @@ public class Deck {
         this.standardCardOnDeck = standardCardOnDeck;
     }
 
+    public DeckStatus getStatus() {
+        return status;
+    }
+
     public Deck(List<Player> players){
         this();
         this.players = players;
@@ -71,6 +75,7 @@ public class Deck {
 
     public void dealingCards(){
         Collections.shuffle(standardCardOnDeck);
+        Collections.rotate(standardCardOnDeck, standardCardOnDeck.size() / 2);
 
         for (int i = 0; i < 2; i++){
             for (Player player : players){
@@ -85,6 +90,8 @@ public class Deck {
             default -> 3;
         };
         this.status = DeckStatus.changeState(status);
+        // Cut one card before opening the card
+        cardsToOpen += 1;
         List<Card> cardToOpen = standardCardOnDeck.subList(cardOpenedCount, cardOpenedCount + cardsToOpen);
         cardOpenedCount += cardsToOpen;
         cardOnDeck.addAll(cardToOpen);

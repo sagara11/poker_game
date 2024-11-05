@@ -28,8 +28,6 @@ X
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
-`
-0src/main/java/org/poker_game/services/Basic.java,5/c/5cfbe68d634b8bcb976c81ca3732923a25b860c2
 a
 1src/main/java/org/poker_game/services/Basics.java,1/b/1b96617345a15af7adc56e2cdd35a64563f78aa3
 M
@@ -40,3 +38,7 @@ _
 /src/main/java/org/poker_game/services/User.java,0/b/0b687122c1fdd39adf4c0b57f210b845e9247c43
 b
 2src/main/java/org/poker_game/services/Mocking.java,a/a/aae8266f8ba3fe95822ef4b8dfa1625c047bc973
+K
+src/test/java/DeckTest.java,3/c/3caee2e0261ac56808c1e1f7510d56aa7db88bf1
+L
+src/test/java/TommyTest.java,f/9/f915d8627a43a0102169b1c9ed51d41004712873

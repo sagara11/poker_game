@@ -55,12 +55,6 @@ public class Main {
         deck.openCard();
         aggregator.evaluate(player1, deck.getCardOnDeck(), "evaluateDFS");
         System.out.println(deck.getCardOnDeck());
-
-//        testStraight();
-//        System.out.println("-".repeat(50));
-//        testFlush();
-//        System.out.println("-".repeat(50));
-//        testFullHouse();
     }
 
     public static void testStraight(){
