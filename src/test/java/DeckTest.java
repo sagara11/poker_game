@@ -8,25 +8,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.poker_game.Deck;
 import org.poker_game.Player;
 import org.poker_game.enums.DeckStatus;
-import org.poker_game.services.Mocking;
-import org.poker_game.services.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class DeckTest {
-    @Mock
-    static List<Player> players = new ArrayList<>();
+    public static List<Player> players = new ArrayList<>();
+
+    private static final String[] names = {"Tommy", "Grace", "Sheldon", "Penny"};
 
     @BeforeAll
     static void setup() {
         System.out.println("Create 4 players and add to deck...");
-        for (int i = 0; i < 3; i++){
-            players.add(new Player(anyString()));
+        for (var name : names){
+            players.add(new Player(name));
         }
     }
 
