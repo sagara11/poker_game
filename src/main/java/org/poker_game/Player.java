@@ -33,11 +33,11 @@ public class Player {
         this.cardOnHand = cardOnHand;
     }
 
-    public void receiveCard(Card card){
+    public boolean receiveCard(Card card){
         if (cardOnHand.size() > 2) {
-            System.out.println("Cannot receive additional cards");
-            return;
+            return false;
         }
         cardOnHand.add(card);
+        return true;
     }
 }

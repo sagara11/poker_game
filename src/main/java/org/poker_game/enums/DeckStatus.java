@@ -1,6 +1,7 @@
 package org.poker_game.enums;
 
 public enum DeckStatus {
+    NULL,
     FLOP,
     TURN,
     RIVER;

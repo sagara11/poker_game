@@ -1,7 +1,10 @@
+package org.poker_game.services;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.poker_game.services.Basics;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class BasicsTest {
     @Test

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Deck {
+public class Deck{
     private List<Card> standardCardOnDeck;
     private List<Card> cardOnDeck;
     private List<Player> players;
@@ -38,11 +38,15 @@ public class Deck {
         return status;
     }
 
+    public int getCardOpenedCount() {
+        return cardOpenedCount;
+    }
+
     public Deck(List<Player> players){
         this();
         this.players = players;
         this.cardOnDeck = new ArrayList<>(5);
-        this.status = DeckStatus.FLOP;
+        this.status = DeckStatus.NULL;
     }
 
     public Deck(){
@@ -73,25 +77,30 @@ public class Deck {
         printDeck("Current Deck", 4);
     }
 
-    public void dealingCards(){
+    public void dealingCards() throws Exception {
         Collections.shuffle(standardCardOnDeck);
         Collections.rotate(standardCardOnDeck, standardCardOnDeck.size() / 2);
 
         for (int i = 0; i < 2; i++){
             for (Player player : players){
-                player.receiveCard(standardCardOnDeck.get(cardOpenedCount++));
+                if (!player.receiveCard(standardCardOnDeck.get(cardOpenedCount++))){
+                    throw new Exception("Cannot deal cards to players");
+                }
             }
         }
     }
 
     public void openCard(){
-        int cardsToOpen = switch (status) {
-            case TURN, RIVER -> 1;
-            default -> 3;
-        };
+        // NULL -> FLOP -> TURN -> RIVER
         this.status = DeckStatus.changeState(status);
         // Cut one card before opening the card
-        cardsToOpen += 1;
+        cardOpenedCount += 1;
+
+        int cardsToOpen = switch (status) {
+            case TURN, RIVER -> 1;
+            case FLOP -> 3;
+            default -> 0;
+        };
         List<Card> cardToOpen = standardCardOnDeck.subList(cardOpenedCount, cardOpenedCount + cardsToOpen);
         cardOpenedCount += cardsToOpen;
         cardOnDeck.addAll(cardToOpen);

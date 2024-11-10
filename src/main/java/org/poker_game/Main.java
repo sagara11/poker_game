@@ -31,7 +31,11 @@ public class Main {
         Deck deck = new Deck(players);
 
         // Dealing Cards
-        deck.dealingCards();
+        try {
+            deck.dealingCards();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // Print each player's cards
         for (Player player : players){
