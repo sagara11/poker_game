@@ -5,6 +5,9 @@ import org.poker_game.Card;
 import org.poker_game.enums.Suit;
 
 import java.util.*;
+
+import static java.lang.Integer.sum;
+
 public class Flush extends Base {
     public static boolean isFlush(List<Card> cards, String method){
         return switch (method){
@@ -66,5 +69,9 @@ public class Flush extends Base {
         }
 
         return false;
+    }
+
+    public static Integer total(List<Integer> nums){
+        return nums.stream().mapToInt(Integer::intValue).sum();
     }
 }
