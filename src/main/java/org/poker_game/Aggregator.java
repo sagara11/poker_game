@@ -25,9 +25,17 @@ public class Aggregator {
         int four = 0, three = 0, pair = 0;
         for(var count : map.values()){
             switch (count) {
-                case 4: four++;
-                case 3: three++;
-                case 2: pair++;
+                case 4:
+                    four++;
+                    break;
+                case 3:
+                    three++;
+                    break;
+                case 2:
+                    pair++;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -50,13 +58,16 @@ public class Aggregator {
     }
 
     public void evaluate(Player player, List<Card> deckCard, String method) {
-        Pattern stateOfPlayer = switch (method){
-            case "evaluateSubsequently" -> evaluateSubsequently(player, deckCard);
-            case "evaluateDFS" -> evaluateDFS(player, deckCard);
+        List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
+        totalCards.addAll(deckCard);
+
+        Pattern stateOfPlayer = switch (method) {
+            case "evaluateSubsequently" -> evaluateSubsequently(totalCards);
+            case "evaluateDFS" -> evaluateDFS(totalCards);
             default -> Pattern.HIGH_CARD;
         };
 
-        System.out.printf("The player %s is the winner with %s in hand \n", player.getName(), stateOfPlayer);
+        System.out.printf("The player %s is the winner with %s in hand %n", player.getName(), stateOfPlayer);
     }
 
     /*
@@ -67,10 +78,7 @@ public class Aggregator {
         Time complexity: O(n) with n is the numbers of all the possible patterns in main.poker
         Space complexity: O(n)
      */
-    private Pattern evaluateSubsequently(Player player, List<Card> deckCard){
-        List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
-        totalCards.addAll(deckCard);
-
+    public Pattern evaluateSubsequently(List<Card> totalCards){
         Pattern stateOfPlayer = Pattern.HIGH_CARD;
         for (Pattern pattern: Pattern.values()){
             String method = pattern == Pattern.STRAIGHT ? "slidingWindow" : "hashTable";
@@ -86,23 +94,18 @@ public class Aggregator {
     }
 
     // Public DFS method
-    public Pattern evaluateDFS(Player player, List<Card> deckCard) {
-        List<Card> totalCards = new ArrayList<>(player.getCardOnHand());
-        totalCards.addAll(deckCard);
-
+    public Pattern evaluateDFS(List<Card> totalCards) {
         Set<Pattern> visited = new HashSet<>(); // Set to track visited nodes
         Graph graph = new Graph();
-        dfs(player, totalCards, Pattern.HIGH_CARD, visited, "", graph);
+        dfs(totalCards, Pattern.HIGH_CARD, visited, graph);
 
         return stateOfTheWinner;
     }
 
     private void dfs(
-            Player player,
             List<Card> totalCards,
             Pattern node,
             Set<Pattern> visited,
-            String method,
             Graph graph
     ){
         if (visited.contains(node)) return;
@@ -118,7 +121,7 @@ public class Aggregator {
         // Visit all adjacent nodes that haven't been visited
         for (var neighbor : graph.getNeighbors(node)) {
             stateOfTheWinner = node.getRank() > stateOfTheWinner.getRank() ? node : stateOfTheWinner;
-            dfs(player, totalCards, neighbor, visited, method, graph); // Recursive call
+            dfs(totalCards, neighbor, visited, graph); // Recursive call
         }
     }
 }
