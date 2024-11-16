@@ -4,7 +4,6 @@ package org.poker_game.services;
 import org.poker_game.Card;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Straight extends Base {
@@ -51,7 +50,7 @@ public class Straight extends Base {
         for (int i = start; i < cards.size(); i++){
             currentSolution.add(cards.get(i));
             generateCombinations(cards, currentSolution, i + 1, result);
-            currentSolution.remove(currentSolution.size());
+            currentSolution.removeLast();
         }
     }
 
@@ -66,18 +65,16 @@ public class Straight extends Base {
         Time Complexity: O(n - 5) (n in this case is 7) = O(2) - Constant Time
         Space Complexity: O(1)
      */
-    private static boolean isStraightUsingSlidingWindow(List<Card> cards) {
+    public static boolean isStraightUsingSlidingWindow(List<Card> cards) {
         // Sliding window of size 5
-        List<Integer> listOfRanks = getListOfElements(cards, Card::getRank);
-        Arrays.sort(listOfRanks.toArray());
+        List<Integer> listOfCardsSorted = new ArrayList<>(getListOfElements(cards, Card::getRank));
+        listOfCardsSorted.sort(Integer::compareTo);
 
-        List<Integer> listOfCardsResizing = new ArrayList<>(listOfRanks);
-
-        if(listOfCardsResizing.contains(14)){
-            listOfCardsResizing.add(0, 1);
+        if(listOfCardsSorted.contains(14)){
+            listOfCardsSorted.addFirst(1);
         }
-        for (int i = 0; i <= listOfCardsResizing.size() - 5; i++) {
-            List<Integer> window = listOfCardsResizing.subList(i, i + 5); // Get the current 5-card window
+        for (int i = 0; i <= listOfCardsSorted.size() - 5; i++) {
+            List<Integer> window = listOfCardsSorted.subList(i, i + 5); // Get the current 5-card window
             if (isStraight(window)) {
                 return true; // Found a straight
             }
@@ -90,7 +87,7 @@ public class Straight extends Base {
         We just simply test all possible combinations and return the straight one
         right after matching the isStraight condition in the for loop.
      */
-    private static boolean isStraightUsingBackTracking(List<Card> cards) {
+    public static boolean isStraightUsingBackTracking(List<Card> cards) {
         List<List<Integer>> combinations = new ArrayList<>(21);
         generateCombinations(getListOfElements(cards, Card::getRank), new ArrayList<>(5), 0, combinations);
 

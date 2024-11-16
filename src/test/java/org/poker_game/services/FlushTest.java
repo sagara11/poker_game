@@ -1,54 +1,51 @@
 package org.poker_game.services;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.poker_game.Card;
+import org.poker_game.TestStructure;
 import org.poker_game.enums.Suit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-record TestCase(List<Card> cards, boolean expectedValue){};
-
 class FlushTest {
-     static String[][] testCases = {
+    static String[][] testCases = {
         // Positive Test Cases (Expected: True)
-        {"♥10", "♥4", "♥6", "♥8", "♥J", "♠2", "♦3", "True"},
-        {"♠A", "♠3", "♠5", "♠7", "♠9", "♥2", "♦4", "True"},
-        {"♣K", "♣Q", "♣J", "♣9", "♣2", "♠6", "♦8", "True"},
-        {"♦A", "♦3", "♦4", "♦7", "♦K", "♠Q", "♣9", "True"},
-        {"♠9", "♠8", "♠5", "♠3", "♠K", "♥7", "♣4", "True"},
+
+        // All cards are the same suit
+        {"♠A", "♠3", "♠5", "♠7", "♠9", "♦2", "♣K", "True"},  // Flush with ♠ (spades), not a sequence
+        {"♦2", "♦4", "♦6", "♦8", "♦J", "♠3", "♣9", "True"},  // Flush with ♦ (diamonds), not a sequence
+        {"♥2", "♥4", "♥6", "♥8", "♥10", "♠A", "♦3", "True"},  // Flush with ♥ (hearts), not a sequence
+        {"♣K", "♣Q", "♣J", "♣9", "♣8", "♦4", "♠7", "True"},  // Flush with ♣ (clubs), not a sequence
+        {"♠5", "♠7", "♠9", "♠J", "♠Q", "♦2", "♣4", "True"},  // Flush with ♠ (spades), not a sequence
 
         // Negative Test Cases (Expected: False)
-        {"♠A", "♠3", "♠5", "♥7", "♥9", "♦2", "♣4", "False"},
-        {"♣K", "♣Q", "♠J", "♠9", "♠2", "♥6", "♦8", "False"},
-        {"♦10", "♦4", "♦6", "♠8", "♠J", "♥2", "♥3", "False"},
-        {"♠A", "♠2", "♥3", "♥4", "♦5", "♦6", "♣7", "False"},
-        {"♥Q", "♥J", "♠10", "♠9", "♣8", "♣7", "♦6", "False"},
 
-        // Edge Case (Expected: True)
-        {"♠2", "♠3", "♠5", "♠7", "♠9", "♠K", "♣4", "True"}
-     };
+        // Cards are of mixed suits or not all from the same suit
+        {"♠A", "♠3", "♦5", "♣7", "♥9", "♦2", "♣K", "False"},  // Mixed suits, not a flush
+        {"♦3", "♦5", "♠7", "♣9", "♠J", "♦8", "♣A", "False"},  // Mixed suits, not a flush
+        {"♣A", "♣2", "♦4", "♥6", "♠8", "♦J", "♠K", "False"},  // Mixed suits, not a flush
+        {"♠9", "♦3", "♠7", "♣2", "♥J", "♠A", "♦K", "False"},  // Mixed suits, not a flush
+        {"♠3", "♠5", "♠7", "♦9", "♠J", "♦K", "♣A", "False"},  // Mixed suits, not a flush
 
-     static String[][] positiveCases = new String[5][8];
-     static String[][] negativeCases = new String[5][8];
-     static String[][] edgeCases = new String[1][8];
+        // Edge Cases (Expected: True or False based on validity)
+
+        // Flush with more than 5 cards, still a flush as long as 5 cards of the same suit exist
+        {"♠2", "♠4", "♠6", "♠8", "♠10", "♠K", "♠A", "True"},  // Flush with ♠ (spades), more than 5 cards
+        {"♦3", "♦5", "♦7", "♦9", "♦J", "♦Q", "♦K", "True"},      // Flush with ♦ (diamonds), more than 5 cards
+
+        // Edge case with no flush, but five cards of the same suit
+        {"♠A", "♠3", "♠5", "♠7", "♠8", "♦6", "♣J", "True"},     // Flush with ♠ (spades), no sequence
+        {"♦2", "♦3", "♦6", "♦8", "♦10", "♠Q", "♣9", "True"},    // Flush with ♦ (diamonds), no sequence
+    };
 
 
-    @BeforeAll
-    static void setup() {
-        positiveCases = Arrays.copyOfRange(testCases, 0, 5);
-        negativeCases = Arrays.copyOfRange(testCases, 5, 10);
-        edgeCases = Arrays.copyOfRange(testCases, 10, 12);
-    }
-     private static Suit convertToSuit(char suit){
+    private static Suit convertToSuit(char suit){
          return switch ((int) suit){
              case 9827 -> Suit.CLUB;
              case 9830 -> Suit.DIAMOND;
@@ -70,8 +67,8 @@ class FlushTest {
         }
      }
 
-    public static List<TestCase> cleanData(String[][] data){
-        List<TestCase> solutions = new ArrayList<>(11);
+    public static List<TestStructure> cleanData(String[][] data){
+        List<TestStructure> solutions = new ArrayList<>(11);
 
         for (String[] solution : data){
             List<Card> cards = new ArrayList<>(7);
@@ -82,16 +79,16 @@ class FlushTest {
                         String.valueOf(card.charAt(1)) + card.charAt(2) : String.valueOf(card.charAt(1));
                 cards.add(convertToCard(value, suit));
             }
-            solutions.add(new TestCase(cards, Boolean.parseBoolean(solution[7])));
+            solutions.add(new TestStructure(cards, Boolean.parseBoolean(solution[7])));
         }
 
         return solutions;
     }
 
-//  Method that supplies the parameters
-    private static Stream<Arguments> providePositiveTestCases() {
+    //  Method that supplies the parameters
+    private static Stream<Arguments> provideTestCases() {
         List<Arguments> arguments = new ArrayList<>();
-        cleanData(positiveCases).forEach(e -> {
+        cleanData(testCases).forEach(e -> {
             arguments.add(
                     Arguments.of(e.cards(), e.expectedValue())
             );
@@ -101,13 +98,16 @@ class FlushTest {
     }
 
     @ParameterizedTest
-    @MethodSource("providePositiveTestCases")
+    @MethodSource("provideTestCases")
     void isFlushUsingHashTable(List<Card> cards, boolean expectedValue) {
         boolean result = Flush.isFlushUsingHashTable(cards);
         assertEquals(expectedValue, result);
     }
 
-    @Test
-    void isFlushUsingSortAndTwoPointer() {
+    @ParameterizedTest
+    @MethodSource("provideTestCases")
+    void isFlushUsingSortAndTwoPointer(List<Card> cards, boolean expectedValue) {
+        boolean result = Flush.isFlushUsingSortAndTwoPointer(cards);
+        assertEquals(expectedValue, result);
     }
 }

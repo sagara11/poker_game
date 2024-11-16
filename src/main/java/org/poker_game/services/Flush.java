@@ -70,8 +70,4 @@ public class Flush extends Base {
 
         return false;
     }
-
-    public static Integer total(List<Integer> nums){
-        return nums.stream().mapToInt(Integer::intValue).sum();
-    }
 }
